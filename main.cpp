@@ -1,23 +1,21 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
-#include <cmath>
-#define ll long long
+
 using namespace std;
 
 struct Matrix
 {
-	vector<vector<ll>> V;
-	ll rows;
-	ll cols;
+	vector<vector<long long>> V;
+	int rows;
+	int cols;
 	
-	Matrix(ll rows, ll cols){
-		V = vector<vector<ll>>(rows, vector<ll>(cols));
+	Matrix(int rows, int cols){
+		V = vector<vector<long long>>(rows, vector<long long>(cols));
 		this->rows = rows;
 		this->cols = cols;
 	}
 
-	Matrix(ll rows, ll cols, vector<vector<ll>> Vec){
+	Matrix(long long rows, long long cols, const vector<vector<long long>> &Vec){
 		V = Vec;
 		this->rows = rows;
 		this->cols = cols;
@@ -25,9 +23,9 @@ struct Matrix
 
 	Matrix operator*(const Matrix &other) const{
 		Matrix ans(this->rows, other.cols);
-		for (ll i = 0; i < this->rows; i++){
-			for (ll j = 0; j < other.cols; j++){
-				for (ll k = 0; k < this->cols; k++){
+		for (size_t i = 0; i < this->rows; i++){
+			for (size_t j = 0; j < other.cols; j++){
+				for (size_t k = 0; k < this->cols; k++){
 					ans.V.at(i).at(j) += this->V.at(i).at(k) * other.V.at(j).at(k);
 				}
 			}
@@ -35,25 +33,25 @@ struct Matrix
 		return ans;
 	}
 
-	void modMatrix(ll mod){
+	void modMatrix(long long mod){
 		for (auto &v : V){
-			for (ll &x : v){
+			for (long long &x : v){
 				x %= mod;
 			}
 		}
 	}
 
-	static Matrix identity(ll size){
+	static Matrix identity(long long size){
 		Matrix iden(size, size);
-		for (ll i = 0; i < size; i++){
+		for (size_t i = 0; i < size; i++){
 			iden.V[i][i] = 1;
 		}
 		return iden;
 	}
 
-	void prll(){
+	void print(){
 		for (auto v : this->V){
-			for (ll x : v){
+			for (long long x : v){
 				cout << x << " ";
 			}
 			cout << endl;
@@ -61,7 +59,7 @@ struct Matrix
 	}
 };
 
-Matrix matrix_fast_exp(Matrix base, ll n, ll mod){
+Matrix matrix_fast_exp(Matrix base, long long n, long long mod){
 	Matrix ans = Matrix::identity(base.rows);
 	while (n > 0){
 		if (n & 1){
@@ -75,12 +73,12 @@ Matrix matrix_fast_exp(Matrix base, ll n, ll mod){
 	return ans;
 }
 
-ll fib(ll n){
-	vector<vector<ll>> V{{0,1}, {1,1}};
+long long fib(long long n){
+	vector<vector<long long>> V{{0,1}, {1,1}};
 	Matrix M(2, 2, V);
-	vector<vector<ll>> V2{{1,1}};
+	vector<vector<long long>> V2{{1,1}};
 	Matrix BaseCase(1, 2, V2);
-	ll mod = 1e9 + 7;
+	long long mod = 1e9 + 7;
 	Matrix fibMat = matrix_fast_exp(M, n , mod);
 	Matrix ans =  BaseCase * fibMat;
 	return ans.V[0][1] % mod;
@@ -90,10 +88,10 @@ int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 	
-	ll t;
+	long long t;
 	cin >> t;
 	while (t--){
-		ll n;
+		long long n;
 		cin >> n;
 		cout << fib(n) << endl;
 	}
